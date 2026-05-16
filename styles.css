@@ -154,6 +154,14 @@ button:disabled {
   content: "";
 }
 
+.point.capture-target::after {
+  width: 46%;
+  height: 46%;
+  border-color: var(--accent);
+  background: rgba(168, 63, 47, 0.2);
+  box-shadow: 0 0 0 8px rgba(168, 63, 47, 0.12);
+}
+
 .status-panel {
   display: grid;
   gap: 22px;

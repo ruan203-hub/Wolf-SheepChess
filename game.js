@@ -35,7 +35,8 @@ function render() {
       point.className = [
         'point',
         isSelected ? 'selected' : '',
-        legalMove ? 'legal' : ''
+        legalMove ? 'legal' : '',
+        legalMove?.type === 'capture' ? 'capture-target' : ''
       ].filter(Boolean).join(' ');
       point.style.setProperty('--row', row);
       point.style.setProperty('--col', col);
@@ -109,10 +110,11 @@ function selectPiece(row, col, piece) {
   }
 
   const legalMoves = getLegalMoves(state, row, col);
+  const hasCapture = legalMoves.some((move) => move.type === 'capture');
   state = {
     ...state,
     selected: { row, col },
-    message: legalMoves.length > 0 ? '请选择一个高亮落点。' : '这枚棋子暂时无路可走。'
+    message: getSelectionMessage(legalMoves.length, hasCapture)
   };
   render();
 }
@@ -138,9 +140,21 @@ function getWinnerText(winner) {
 function getPointLabel(row, col, piece, legalMove) {
   const position = `第${row + 1}行第${col + 1}列`;
   const pieceText = piece ? getTurnText(piece) : '空点';
-  const moveText = legalMove ? '，可走' : '';
+  const moveText = legalMove?.type === 'capture' ? '，可跳吃' : legalMove ? '，可走' : '';
 
   return `${position}，${pieceText}${moveText}`;
+}
+
+function getSelectionMessage(moveCount, hasCapture) {
+  if (moveCount === 0) {
+    return '这枚棋子暂时无路可走。';
+  }
+
+  if (hasCapture) {
+    return '可跳吃：点击羊后方的红色空点，不是点击羊。';
+  }
+
+  return '请选择一个绿色高亮落点。';
 }
 
 render();
