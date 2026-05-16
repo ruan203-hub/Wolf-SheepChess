@@ -52,16 +52,16 @@ export function getLegalMoves(state, row, col) {
       stepMoves.push({ row: nextRow, col: nextCol, type: 'move' });
     }
 
-    if (piece === WOLF && state.board[nextRow]?.[nextCol] === SHEEP) {
-      const jumpRow = row + direction.row * 2;
-      const jumpCol = col + direction.col * 2;
+    if (piece === WOLF && isInsideBoard(nextRow, nextCol) && !state.board[nextRow][nextCol]) {
+      const sheepRow = row + direction.row * 2;
+      const sheepCol = col + direction.col * 2;
 
-      if (isInsideBoard(jumpRow, jumpCol) && !state.board[jumpRow][jumpCol]) {
+      if (isInsideBoard(sheepRow, sheepCol) && state.board[sheepRow][sheepCol] === SHEEP) {
         captureMoves.push({
-          row: jumpRow,
-          col: jumpCol,
+          row: sheepRow,
+          col: sheepCol,
           type: 'capture',
-          captured: { row: nextRow, col: nextCol }
+          captured: { row: sheepRow, col: sheepCol }
         });
       }
     }
@@ -84,13 +84,13 @@ export function applyMove(state, from, to) {
 
   next.history = [...state.history, createSnapshot(state)];
   next.board[from.row][from.col] = null;
-  next.board[to.row][to.col] = piece;
 
   if (legalMove.type === 'capture') {
     next.board[legalMove.captured.row][legalMove.captured.col] = null;
     next.capturedSheep += 1;
   }
 
+  next.board[to.row][to.col] = piece;
   next.turn = piece === WOLF ? SHEEP : WOLF;
   next.selected = null;
   next.message = next.turn === WOLF ? '轮到狼方。' : '轮到羊方。';

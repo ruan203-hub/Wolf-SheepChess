@@ -5,7 +5,7 @@ import {
   createInitialState,
   getLegalMoves,
   undo
-} from './game-core.js';
+} from './game-core.js?v=20260516-capture-rule';
 
 const boardEl = document.querySelector('#board');
 const turnTextEl = document.querySelector('#turnText');
@@ -151,7 +151,7 @@ function getSelectionMessage(moveCount, hasCapture) {
   }
 
   if (hasCapture) {
-    return '可跳吃：点击羊后方的红色空点，不是点击羊。';
+    return '可跳吃：点击隔一个空点后的红色羊棋。';
   }
 
   return '请选择一个绿色高亮落点。';

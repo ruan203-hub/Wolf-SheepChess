@@ -28,7 +28,8 @@ test('wolf can move one orthogonal step to an empty point', () => {
 
   assert.deepEqual(moves, [
     { row: 1, col: 2, type: 'move' },
-    { row: 0, col: 1, type: 'move' }
+    { row: 0, col: 1, type: 'move' },
+    { row: 2, col: 2, type: 'capture', captured: { row: 2, col: 2 } }
   ]);
 
   const next = applyMove(state, { row: 0, col: 2 }, { row: 1, col: 2 });
@@ -91,14 +92,14 @@ test('sheep cannot move like a capture', () => {
   );
 });
 
-test('wolf can jump over an adjacent sheep and capture it', () => {
+test('wolf can jump over an empty point and capture a sheep two points away', () => {
   const state = {
     ...createInitialState(),
     board: [
       [null, null, null, null, null, null],
       [null, null, WOLF, null, null, null],
-      [null, null, SHEEP, null, null, null],
       [null, null, null, null, null, null],
+      [null, null, SHEEP, null, null, null],
       [null, null, null, null, null, null],
       [null, null, null, null, null, null]
     ],
@@ -107,9 +108,10 @@ test('wolf can jump over an adjacent sheep and capture it', () => {
 
   assert.deepEqual(getLegalMoves(state, 1, 2), [
     { row: 0, col: 2, type: 'move' },
+    { row: 2, col: 2, type: 'move' },
     { row: 1, col: 3, type: 'move' },
     { row: 1, col: 1, type: 'move' },
-    { row: 3, col: 2, type: 'capture', captured: { row: 2, col: 2 } }
+    { row: 3, col: 2, type: 'capture', captured: { row: 3, col: 2 } }
   ]);
 
   const next = applyMove(state, { row: 1, col: 2 }, { row: 3, col: 2 });
@@ -127,8 +129,8 @@ test('wolf capture is optional when a normal move is also legal', () => {
     board: [
       [null, null, null, null, null, null],
       [null, null, WOLF, null, null, null],
-      [null, null, SHEEP, null, null, null],
       [null, null, null, null, null, null],
+      [null, null, SHEEP, null, null, null],
       [null, null, null, null, null, null],
       [null, null, null, null, null, null]
     ],
@@ -139,7 +141,7 @@ test('wolf capture is optional when a normal move is also legal', () => {
 
   assert.equal(next.board[1][2], null);
   assert.equal(next.board[1][3], WOLF);
-  assert.equal(next.board[2][2], SHEEP);
+  assert.equal(next.board[3][2], SHEEP);
   assert.equal(next.capturedSheep, 0);
 });
 
@@ -148,11 +150,11 @@ test('wolf cannot capture more than one sheep in a single move', () => {
     ...createInitialState(),
     board: [
       [null, null, WOLF, null, null, null],
-      [null, null, SHEEP, null, null, null],
       [null, null, null, null, null, null],
       [null, null, SHEEP, null, null, null],
       [null, null, null, null, null, null],
-      [null, null, null, null, null, null]
+      [null, null, SHEEP, null, null, null],
+      [null, null, null, null, null, null],
     ],
     turn: WOLF
   };
@@ -161,7 +163,7 @@ test('wolf cannot capture more than one sheep in a single move', () => {
 
   assert.equal(next.turn, SHEEP);
   assert.equal(next.capturedSheep, 1);
-  assert.equal(next.board[3][2], SHEEP);
+  assert.equal(next.board[4][2], SHEEP);
 });
 
 test('wolves win when all sheep have been captured', () => {
@@ -169,8 +171,8 @@ test('wolves win when all sheep have been captured', () => {
     ...createInitialState(),
     board: [
       [null, null, WOLF, null, null, null],
-      [null, null, SHEEP, null, null, null],
       [null, null, null, null, null, null],
+      [null, null, SHEEP, null, null, null],
       [null, null, null, null, null, null],
       [null, null, null, null, null, null],
       [null, null, null, null, null, null]
@@ -183,6 +185,31 @@ test('wolves win when all sheep have been captured', () => {
 
   assert.equal(next.capturedSheep, 24);
   assert.equal(next.winner, WOLF);
+});
+
+test('wolf cannot capture with the old adjacent-sheep-then-empty pattern', () => {
+  const state = {
+    ...createInitialState(),
+    board: [
+      [null, null, null, null, null, null],
+      [null, null, WOLF, null, null, null],
+      [null, null, SHEEP, null, null, null],
+      [null, null, null, null, null, null],
+      [null, null, null, null, null, null],
+      [null, null, null, null, null, null]
+    ],
+    turn: WOLF
+  };
+
+  assert.deepEqual(getLegalMoves(state, 1, 2), [
+    { row: 0, col: 2, type: 'move' },
+    { row: 1, col: 3, type: 'move' },
+    { row: 1, col: 1, type: 'move' }
+  ]);
+  assert.throws(
+    () => applyMove(state, { row: 1, col: 2 }, { row: 3, col: 2 }),
+    /非法移动/
+  );
 });
 
 test('sheep win when both wolves have no legal moves', () => {
