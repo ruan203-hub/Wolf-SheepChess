@@ -5,14 +5,56 @@
   --ink: #27231d;
   --muted: #766b5c;
   --line: #2b241a;
+  --body-glow: #fff9ea;
+  --body-shade: #eadfc9;
+  --board-bg: rgba(255, 250, 240, 0.62);
+  --board-field: #fff6df;
+  --panel-bg: rgba(255, 250, 240, 0.86);
+  --border-soft: rgba(43, 36, 26, 0.18);
+  --rule-soft: rgba(43, 36, 26, 0.14);
+  --shadow: rgba(64, 44, 20, 0.16);
+  --message-bg: rgba(168, 63, 47, 0.08);
+  --message-ink: #4b3226;
   --accent: #a83f2f;
   --accent-strong: #81291f;
   --sheep: #fbf5e7;
   --sheep-edge: #c9aa76;
   --wolf: #303030;
   --wolf-edge: #111;
+  --wolf-fur: #6d6d6d;
+  --wolf-face: #efe2c7;
+  --wolf-mark: #151515;
   --highlight: #2f8f6b;
   font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+}
+
+body[data-theme="night"] {
+  color-scheme: dark;
+  --bg: #17212b;
+  --surface: #202c36;
+  --ink: #f3ead8;
+  --muted: #b7ad9d;
+  --line: #d9c59e;
+  --body-glow: #263748;
+  --body-shade: #101820;
+  --board-bg: rgba(24, 35, 44, 0.78);
+  --board-field: #1b2833;
+  --panel-bg: rgba(29, 40, 49, 0.9);
+  --border-soft: rgba(217, 197, 158, 0.24);
+  --rule-soft: rgba(217, 197, 158, 0.18);
+  --shadow: rgba(0, 0, 0, 0.34);
+  --message-bg: rgba(222, 153, 92, 0.12);
+  --message-ink: #f5dec1;
+  --accent: #de995c;
+  --accent-strong: #b96d44;
+  --sheep: #f7efd8;
+  --sheep-edge: #d7bd84;
+  --wolf: #101418;
+  --wolf-edge: #030506;
+  --wolf-fur: #77818b;
+  --wolf-face: #f0ddbe;
+  --wolf-mark: #080b0e;
+  --highlight: #73c9a4;
 }
 
 * {
@@ -22,7 +64,7 @@
 body {
   min-height: 100vh;
   margin: 0;
-  background: radial-gradient(circle at top left, #fff9ea 0, var(--bg) 42%, #eadfc9 100%);
+  background: radial-gradient(circle at top left, var(--body-glow) 0, var(--bg) 42%, var(--body-shade) 100%);
   color: var(--ink);
 }
 
@@ -66,10 +108,10 @@ button:disabled {
   max-width: 100%;
   aspect-ratio: 1;
   padding: clamp(22px, 4vw, 42px);
-  border: 2px solid rgba(43, 36, 26, 0.18);
+  border: 2px solid var(--border-soft);
   border-radius: 8px;
-  background: rgba(255, 250, 240, 0.62);
-  box-shadow: 0 22px 60px rgba(64, 44, 20, 0.16);
+  background: var(--board-bg);
+  box-shadow: 0 22px 60px var(--shadow);
 }
 
 .board {
@@ -92,7 +134,8 @@ button:disabled {
       transparent calc(20% - 1px),
       var(--line) calc(20% - 1px),
       var(--line) calc(20% + 1px)
-    );
+    ),
+    var(--board-field);
 }
 
 .point {
@@ -129,7 +172,9 @@ button:disabled {
 
 .piece.wolf {
   border-color: var(--wolf-edge);
-  background: var(--wolf);
+  background:
+    radial-gradient(circle at 50% 62%, rgba(255, 244, 221, 0.18) 0 21%, transparent 22%),
+    linear-gradient(145deg, #4d4d4d 0%, var(--wolf) 54%, #181818 100%);
   color: #fff4dd;
 }
 
@@ -137,6 +182,40 @@ button:disabled {
   border-color: var(--sheep-edge);
   background: var(--sheep);
   color: #7b562d;
+}
+
+.wolf-icon {
+  width: 92%;
+  height: 92%;
+  display: block;
+  overflow: visible;
+}
+
+.wolf-icon__head {
+  fill: var(--wolf-fur);
+  stroke: var(--wolf-edge);
+  stroke-linejoin: round;
+  stroke-width: 3.5;
+}
+
+.wolf-icon__muzzle {
+  fill: var(--wolf-face);
+  stroke: #231f1a;
+  stroke-linejoin: round;
+  stroke-width: 2.4;
+}
+
+.wolf-icon__snout,
+.wolf-icon__eye {
+  fill: var(--wolf-mark);
+}
+
+.wolf-icon__brow,
+.wolf-icon__cheek {
+  fill: none;
+  stroke: var(--wolf-mark);
+  stroke-linecap: round;
+  stroke-width: 2.8;
 }
 
 .point.selected .piece {
@@ -166,10 +245,10 @@ button:disabled {
   display: grid;
   gap: 22px;
   padding: 24px;
-  border: 1px solid rgba(43, 36, 26, 0.16);
+  border: 1px solid var(--border-soft);
   border-radius: 8px;
-  background: rgba(255, 250, 240, 0.86);
-  box-shadow: 0 16px 42px rgba(64, 44, 20, 0.12);
+  background: var(--panel-bg);
+  box-shadow: 0 16px 42px var(--shadow);
 }
 
 .eyebrow {
@@ -197,7 +276,7 @@ h1 {
   justify-content: space-between;
   gap: 16px;
   padding-bottom: 10px;
-  border-bottom: 1px solid rgba(43, 36, 26, 0.14);
+  border-bottom: 1px solid var(--rule-soft);
 }
 
 dt {
@@ -216,8 +295,8 @@ dd {
   margin: 0;
   padding: 12px 14px;
   border-left: 4px solid var(--accent);
-  background: rgba(168, 63, 47, 0.08);
-  color: #4b3226;
+  background: var(--message-bg);
+  color: var(--message-ink);
   line-height: 1.55;
 }
 
@@ -225,6 +304,10 @@ dd {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
+}
+
+#themeToggle {
+  grid-column: 1 / -1;
 }
 
 @media (max-width: 860px) {
