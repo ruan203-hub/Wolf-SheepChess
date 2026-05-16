@@ -1,0 +1,22 @@
+# macOS
+.DS_Store
+
+# Local editor and tool state
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Dependencies and build output
+node_modules/
+dist/
+build/
+coverage/
+
+# Logs and environment files
+*.log
+.env
+.env.*
+
+# Superpowers brainstorming scratch space
+.superpowers/
