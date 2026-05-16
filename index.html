@@ -8,12 +8,6 @@
   </head>
   <body>
     <main class="app-shell">
-      <section class="game-area" aria-label="狼羊棋棋盘">
-        <div class="board-wrap">
-          <div id="board" class="board" role="grid" aria-label="6乘6狼羊棋棋盘"></div>
-        </div>
-      </section>
-
       <aside class="status-panel" aria-label="游戏状态">
         <div>
           <p class="eyebrow">北方民间棋</p>
@@ -36,14 +30,19 @@
         </dl>
 
         <p id="message" class="message" aria-live="polite">狼方先走。</p>
+      </aside>
 
-        <div class="actions">
+      <section class="game-area" aria-label="狼羊棋棋盘">
+        <div class="board-actions">
           <button id="undoButton" type="button">撤销一步</button>
           <button id="restartButton" type="button">重新开始</button>
         </div>
-      </aside>
+        <div class="board-wrap">
+          <div id="board" class="board" role="grid" aria-label="6乘6狼羊棋棋盘"></div>
+        </div>
+      </section>
     </main>
 
-    <script type="module" src="game.js?v=20260516-capture-rule"></script>
+    <script src="game.js?v=20260516-capture-rule"></script>
   </body>
 </html>
