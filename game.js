@@ -209,8 +209,12 @@ const capturedSheepEl = document.querySelector('#capturedSheep');
 const messageEl = document.querySelector('#message');
 const undoButton = document.querySelector('#undoButton');
 const restartButton = document.querySelector('#restartButton');
+const themeToggle = document.querySelector('#themeToggle');
 
 let state = createInitialState();
+let theme = getSavedTheme();
+
+applyTheme(theme);
 
 function render() {
   boardEl.innerHTML = '';
@@ -328,6 +332,11 @@ restartButton.addEventListener('click', () => {
   render();
 });
 
+themeToggle.addEventListener('click', () => {
+  theme = theme === 'day' ? 'night' : 'day';
+  applyTheme(theme);
+});
+
 function getTurnText(turn) {
   return turn === WOLF ? '狼方' : '羊方';
 }
@@ -354,6 +363,26 @@ function getSelectionMessage(moveCount, hasCapture) {
   }
 
   return '请选择一个绿色高亮落点。';
+}
+
+function getSavedTheme() {
+  try {
+    return localStorage.getItem('boardTheme') === 'night' ? 'night' : 'day';
+  } catch {
+    return 'day';
+  }
+}
+
+function applyTheme(nextTheme) {
+  document.body.dataset.theme = nextTheme;
+  themeToggle.textContent = nextTheme === 'night' ? '白天模式' : '晚上模式';
+  themeToggle.setAttribute('aria-pressed', String(nextTheme === 'night'));
+
+  try {
+    localStorage.setItem('boardTheme', nextTheme);
+  } catch {
+    // Theme switching should still work when browser storage is unavailable.
+  }
 }
 
 render();

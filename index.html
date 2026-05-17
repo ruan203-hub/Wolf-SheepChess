@@ -6,7 +6,7 @@
     <title>狼羊棋</title>
     <link rel="stylesheet" href="styles.css?v=20260516-capture-rule">
   </head>
-  <body>
+  <body data-theme="day">
     <main class="app-shell">
       <aside class="status-panel" aria-label="游戏状态">
         <div>
@@ -34,6 +34,7 @@
 
       <section class="game-area" aria-label="狼羊棋棋盘">
         <div class="board-actions">
+          <button id="themeToggle" type="button" aria-pressed="false">晚上模式</button>
           <button id="undoButton" type="button">撤销一步</button>
           <button id="restartButton" type="button">重新开始</button>
         </div>
