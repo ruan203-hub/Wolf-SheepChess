@@ -15,6 +15,10 @@
   --shadow: rgba(64, 44, 20, 0.16);
   --message-bg: rgba(168, 63, 47, 0.08);
   --message-ink: #4b3226;
+  --button-bg: #27231d;
+  --button-ink: #fff9ea;
+  --button-border: #2b241a;
+  --button-hover-bg: #81291f;
   --accent: #a83f2f;
   --accent-strong: #81291f;
   --sheep: #fbf5e7;
@@ -45,6 +49,10 @@ body[data-theme="night"] {
   --shadow: rgba(0, 0, 0, 0.34);
   --message-bg: rgba(222, 153, 92, 0.12);
   --message-ink: #f5dec1;
+  --button-bg: #f0ddbe;
+  --button-ink: #14212b;
+  --button-border: #d9c59e;
+  --button-hover-bg: #de995c;
   --accent: #de995c;
   --accent-strong: #b96d44;
   --sheep: #f7efd8;
@@ -70,22 +78,22 @@ body {
 
 button {
   min-height: 44px;
-  border: 1px solid var(--line);
+  border: 1px solid var(--button-border);
   border-radius: 8px;
-  background: var(--ink);
-  color: #fff9ea;
+  background: var(--button-bg);
+  color: var(--button-ink);
   cursor: pointer;
   font: inherit;
   font-weight: 700;
 }
 
 button:hover {
-  background: var(--accent-strong);
+  background: var(--button-hover-bg);
 }
 
 button:disabled {
   cursor: not-allowed;
-  opacity: 0.45;
+  opacity: 0.62;
 }
 
 .app-shell {
